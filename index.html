@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth dark">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -362,7 +362,7 @@
     <!-- Katalog Produk (Dengan Efek Icy Hover) -->
     <section id="produk" class="reveal-section py-12 relative w-full bg-white dark:bg-[#020408] reveal-element transition-colors duration-500" style="transition-delay: 100ms;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+            <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4" id="product-grid">
                 <!-- Dynamic cards will be generated here by JavaScript -->
             </div>
         </div>
@@ -716,6 +716,25 @@
 
     <!-- JavaScript logic -->
     <script>
+
+        // Daftarin tombol dan menunya ke JavaScript
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuDropdown = document.getElementById('mobile-menu');
+
+        // Kasih perintah pas tombol di-klik
+        mobileMenuBtn.addEventListener('click', () => {
+            // Kocok/toggle class hidden. Kalau ada dihilangkan, kalau gak ada dimunculkan
+            mobileMenuDropdown.classList.toggle('hidden');
+        });
+
+
+        // Jalankan ini biar pas pertama kali buka dipaksa putih bersih
+            if (!localStorage.getItem('theme')) {
+                localStorage.setItem('theme', 'light');
+                document.documentElement.classList.remove('dark');
+            } else if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
 
                 const pemicuScroll = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
