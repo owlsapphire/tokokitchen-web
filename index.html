@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokoKitchen by HKA - Spesialis Pendingin Komersial Premium</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        freeze: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            900: '#0f172a',
+                            deep: '#05070c',
+                            card: '#0a0f1d',
+                            glow: '#06b6d4',
+                            lightbg: '#f4f9fd',
+                        }
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 20px rgba(6, 182, 212, 0.15)',
+                        'neon-glow': '0 0 35px rgba(6, 182, 212, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+      /* Kondisi awal: Section agak turun ke bawah, transparan, dan sedikit blur */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(50px) scale(0.98);
+            filter: blur(4px);
+            
+            /* Efek transisi ngerem yang smooth (Cubic Bezier) */
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity, filter;
+        }
+
+        /* Kondisi akhir: Pas di-scroll, langsung naik ke posisi asli dan jernih */
+        .reveal-section.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* Custom Glowing and Background effects */
+        .glass-nav {
+            backdrop-filter: blur(16px);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Reveal Motion */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(50px) scale(0.98);
+            filter: blur(4px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* Ambient Spotlight */
+        .dark #magnetic-spotlight {
+            display: block;
+        }
+        #magnetic-spotlight {
+            display: none;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.07) 0%, rgba(6, 182, 212, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            mix-blend-mode: screen;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+        @media (hover: none) {
+            #magnetic-spotlight { display: none !important; }
+        }
+
+        /* Cryo Slider visual track */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #06b6d4;
+            box-shadow: 0 0 15px #06b6d4;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body class="bg-freeze-lightbg dark:bg-[#020408] text-slate-800 dark:text-slate-200 font-sans antialiased overflow-x-hidden w-full m-0 p-0 relative transition-colors duration-500">
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-freeze-glow to-teal-400 z-[60] transition-all duration-75" style="width: 0%"></div>
+
+    <!-- Interactive Ambient Cursor Glow -->
+    <div id="magnetic-spotlight"></div>
+
+    <!-- Header / Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav bg-white/80 dark:bg-[#05070c]/85 border-b border-sky-100 dark:border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex flex-col">
+                    <span class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                        <i class="fa-solid fa-snowflake text-freeze-glow animate-spin" style="animation-duration: 10s"></i>
+                        Toko<span class="text-freeze-glow">Kitchen</span>
+                    </span>
+                    <a href="https://hkahoreca.com" target="_blank" class="text-[10px] text-slate-500 dark:text-slate-400 hover:text-freeze-glow dark:hover:text-freeze-glow font-semibold tracking-wider uppercase -mt-1 transition-colors flex items-center gap-1 group">
+                        by Hutama Karya Abadi
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[8px] opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-freeze-glow transition-colors relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-freeze-glow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#kategori" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-freeze-glow transition-colors relative group">
+                        Kategori
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-freeze-glow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#produk" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-freeze-glow transition-colors relative group">
+                        Katalog Unit
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-freeze-glow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#cryosimulator" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-freeze-glow transition-colors relative group">
+                        Cryo-Zone Lab
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-freeze-glow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#mengapa" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-freeze-glow transition-colors relative group">
+                        Mengapa HKA
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-freeze-glow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </div>
+
+                <!-- Action Buttons: Theme Toggle + WA -->
+                <div class="hidden md:flex items-center gap-4">
+                    <!-- Light/Dark Mode Toggle -->
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-freeze-glow dark:hover:text-freeze-glow transition-colors">
+                        <i id="theme-icon" class="fa-solid fa-sun"></i>
+                    </button>
+
+                    <a href="https://wa.me/6282111506069?text=Halo%20TokoKitchen%20HKA%2C%20saya%20ingin%20berkonsultasi%20mengenai%20kebutuhan%20unit%20pendingin%20dapur." 
+                       target="_blank"
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-500 dark:to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-300 shadow-lg hover:shadow-emerald-900/40 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        Chat WA Sales
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button & Theme Toggle -->
+                <div class="md:hidden flex items-center gap-3">
+                    <button onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">
+                        <i id="theme-icon-mobile" class="fa-solid fa-sun"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-slate-600 dark:text-slate-300 hover:text-freeze-glow focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-freeze-deep border-b border-sky-100 dark:border-white/5 px-4 pt-2 pb-6 space-y-3 shadow-lg">
+            <a href="#home" class="block text-base font-medium text-slate-700 dark:text-slate-300 hover:text-freeze-glow py-2">Beranda</a>
+            <a href="#kategori" class="block text-base font-medium text-slate-700 dark:text-slate-300 hover:text-freeze-glow py-2">Kategori</a>
+            <a href="#produk" class="block text-base font-medium text-slate-700 dark:text-slate-300 hover:text-freeze-glow py-2">Katalog Unit</a>
+            <a href="#cryosimulator" class="block text-base font-medium text-slate-700 dark:text-slate-300 hover:text-freeze-glow py-2">Cryo-Zone Lab</a>
+            <a href="#mengapa" class="block text-base font-medium text-slate-700 dark:text-slate-300 hover:text-freeze-glow py-2">Mengapa HKA</a>
+            <div class="border-t border-sky-100 dark:border-white/5 pt-4 space-y-3">
+                <a href="https://hkahoreca.com" 
+                   target="_blank"
+                   class="flex items-center justify-center gap-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 text-base font-semibold py-3 rounded-xl border border-sky-200 dark:border-white/10">
+                    <i class="fa-solid fa-globe text-freeze-glow"></i>
+                    Kunjungi Main Web HKA
+                </a>
+                <a href="https://wa.me/6282111506069?text=Halo%20TokoKitchen%20HKA%2C%20saya%20ingin%20berkonsultasi%20mengenai%20kebutuhan%20unit%20pendingin%20dapur." 
+                   target="_blank"
+                   class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-base font-bold py-3 rounded-xl transition-all">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    Hubungi Sales via WA
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-24 md:pt-44 md:pb-36 overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-100 via-freeze-lightbg to-white dark:bg-none dark:bg-[#020408] w-full transition-colors duration-500">
+        <canvas id="snow-canvas" class="absolute inset-0 pointer-events-none z-0 opacity-60 dark:opacity-40"></canvas>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 text-center lg:text-left reveal-element" id="hero-text">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-100 dark:bg-cyan-900/40 border border-cyan-300 dark:border-cyan-700/50 text-cyan-700 dark:text-cyan-300 text-xs font-bold uppercase tracking-wider mb-6">
+                        <span class="w-2 h-2 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-ping"></span>
+                        PRO-GRADE REFRIGERATION SOLUTION
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                        Solusi Pendingin Komersial <br class="hidden sm:inline">
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-500 dark:from-cyan-400 dark:to-blue-400">Terbaik dan Terpercaya</span>
+                    </h1>
+                    <p class="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                       Menyediakan Chiller, Freezer, dan Showcase berkualitas tinggi dengan garansi purnajual resmi. Dirancang tangguh untuk efisiensi operasional Resto, Kafe, Hotel, dan Katering Anda.
+                    </p>
+                    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#produk" class="inline-flex items-center justify-center bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-400 text-white dark:text-black font-extrabold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 dark:shadow-[0_0_15px_rgba(6,182,212,0.4)] transform hover:-translate-y-0.5">
+                            Eksplor Katalog Unit
+                            <i class="fa-solid fa-cube ml-2"></i>
+                        </a>
+                        <a href="#cryosimulator" class="inline-flex items-center justify-center bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-slate-700 dark:text-white border border-sky-200 dark:border-white/15 font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-sm">
+                            Coba Cryo-Zone Simulator
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 flex justify-center relative reveal-element" id="hero-img" style="transition-delay: 150ms;">
+                    <div class="absolute inset-0 bg-cyan-200/50 dark:bg-cyan-500/10 rounded-full blur-[100px] w-72 h-72 mx-auto my-auto"></div>
+                    
+                    <div class="relative max-w-sm sm:max-w-md">
+                        <svg class="w-full h-auto max-w-[280px] sm:max-w-[340px] drop-shadow-[0_0_50px_rgba(6,182,212,0.2)] dark:drop-shadow-[0_0_50px_rgba(6,182,212,0.3)] animate-float mx-auto" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="10" width="160" height="280" rx="15" fill="#0f172a" stroke="#06b6d4" stroke-width="4"/>
+                            <rect x="25" y="15" width="150" height="270" rx="10" fill="#040814" stroke="#1e293b" stroke-width="2"/>
+                            <rect x="75" y="25" width="50" height="20" rx="4" fill="#020617" stroke="#06b6d4" stroke-width="1.5"/>
+                            <text x="100" y="39" fill="#06b6d4" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">4.0°C</text>
+                            <line x1="100" y1="55" x2="100" y2="275" stroke="#1e293b" stroke-width="3"/>
+                            <line x1="25" y1="165" x2="175" y2="165" stroke="#1e293b" stroke-width="3"/>
+                            <rect x="90" y="80" width="4" height="60" rx="2" fill="#06b6d4"/>
+                            <rect x="106" y="80" width="4" height="60" rx="2" fill="#06b6d4"/>
+                            <rect x="90" y="180" width="4" height="60" rx="2" fill="#06b6d4"/>
+                            <rect x="106" y="180" width="4" height="60" rx="2" fill="#06b6d4"/>
+                            <line x1="30" y1="110" x2="170" y2="110" stroke="rgba(6, 182, 212, 0.2)" stroke-width="2" stroke-dasharray="4 2"/>
+                            <line x1="30" y1="220" x2="170" y2="220" stroke="rgba(6, 182, 212, 0.2)" stroke-width="2" stroke-dasharray="4 2"/>
+                        </svg>
+                        
+                        <div class="absolute -top-4 -left-4 bg-white/95 dark:bg-[#0a0f1d]/95 border border-sky-100 dark:border-white/10 p-4 rounded-2xl shadow-xl dark:shadow-2xl backdrop-blur-md flex items-center gap-3 transform hover:scale-105 transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/40 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                                <i class="fa-solid fa-snowflake animate-spin" style="animation-duration: 8s"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Suhu Akurat</p>
+                                <p class="text-sm text-slate-800 dark:text-white font-bold">Mencapai -39°C</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-6 -right-4 bg-white/95 dark:bg-[#0a0f1d]/95 border border-sky-100 dark:border-white/10 p-4 rounded-2xl shadow-xl dark:shadow-2xl backdrop-blur-md flex items-center gap-3 transform hover:scale-105 transition-all">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/40 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Bahan Premium</p>
+                                <p class="text-sm text-slate-800 dark:text-white font-bold">Stainless SUS 304</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kategori Section -->
+    <section id="kategori" class="reveal-section py-16 border-t border-sky-100 dark:border-white/5 bg-slate-50 dark:bg-[#05070c] relative w-full reveal-element transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Kategori Utama Unit Pendingin</h2>
+                <p class="mt-4 text-slate-600 dark:text-slate-400">Pilih kategori unit yang sesuai dengan kebutuhan layout dapur komersial Anda.</p>
+            </div>
+
+            <!-- Susunan Pill Kategori -->
+            <div class="mt-12 flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
+                <button onclick="filterCategory('all')" id="tab-all" class="category-tab active px-6 py-3 rounded-full bg-cyan-500 dark:bg-[#06b6d4] text-white dark:text-black font-bold text-sm transition-all duration-300 shadow-md transform hover:scale-105">
+                    Semua Lini Unit (18)
+                </button>
+                <button onclick="filterCategory('upright')" id="tab-upright" class="category-tab px-6 py-3 rounded-full bg-white dark:bg-[#111827] hover:bg-sky-50 dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-slate-600 dark:text-slate-300 font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm dark:shadow-none">
+                    Upright Chiller & Freezer
+                </button>
+                <button onclick="filterCategory('undercounter')" id="tab-undercounter" class="category-tab px-6 py-3 rounded-full bg-white dark:bg-[#111827] hover:bg-sky-50 dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-slate-600 dark:text-slate-300 font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm dark:shadow-none">
+                    Meja Pendingin (Under Counter)
+                </button>
+                <button onclick="filterCategory('showcase')" id="tab-showcase" class="category-tab px-6 py-3 rounded-full bg-white dark:bg-[#111827] hover:bg-sky-50 dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-slate-600 dark:text-slate-300 font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm dark:shadow-none">
+                    Display Cooler & Showcase
+                </button>
+                <button onclick="filterCategory('freezer')" id="tab-freezer" class="category-tab px-6 py-3 rounded-full bg-white dark:bg-[#111827] hover:bg-sky-50 dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-slate-600 dark:text-slate-300 font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm dark:shadow-none">
+                    Chest & Glass Freezer
+                </button>
+                <button onclick="filterCategory('blast')" id="tab-blast" class="category-tab px-6 py-3 rounded-full bg-white dark:bg-[#111827] hover:bg-sky-50 dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-slate-600 dark:text-slate-300 font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm dark:shadow-none">
+                    Blast Chiller & Shock Freezer
+                </button>
+            </div>
+
+            <!-- Search Bar & Sort Filter -->
+            <div class="mt-8 max-w-2xl mx-auto flex flex-col md:flex-row gap-4">
+                <!-- Search -->
+                <div class="relative flex-grow">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <input type="text" id="product-search-input" onkeyup="searchProducts()" placeholder="Cari unit atau seri pendingin (cth: Freerzer, Undercounter)..." class="w-full bg-white dark:bg-[#0a0f1d] border border-sky-200 dark:border-white/10 rounded-2xl py-3.5 pl-10 pr-4 text-sm text-slate-800 dark:text-slate-200 outline-none focus:border-cyan-500 dark:focus:border-cyan-500 transition-all">
+                </div>
+                <!-- Sort Dropdown -->
+                <div class="relative min-w-[220px]">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                    </div>
+                    <select id="product-sort-select" onchange="sortProducts()" class="w-full bg-white dark:bg-[#0a0f1d] border border-sky-200 dark:border-white/10 rounded-2xl py-3.5 pl-10 pr-10 text-sm text-slate-800 dark:text-slate-200 outline-none focus:border-cyan-500 dark:focus:border-cyan-500 transition-all cursor-pointer appearance-none font-medium">
+                        <option value="default" class="bg-white dark:bg-[#0a0f1d] text-slate-800 dark:text-slate-200">Urutkan: Relevansi</option>
+                        <option value="asc" class="bg-white dark:bg-[#0a0f1d] text-slate-800 dark:text-slate-200">Harga: Rendah ke Tinggi</option>
+                        <option value="desc" class="bg-white dark:bg-[#0a0f1d] text-slate-800 dark:text-slate-200">Harga: Tinggi ke Rendah</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Katalog Produk (Dengan Efek Icy Hover) -->
+    <section id="produk" class="reveal-section py-12 relative w-full bg-white dark:bg-[#020408] reveal-element transition-colors duration-500" style="transition-delay: 100ms;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+                <!-- Dynamic cards will be generated here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Cryo-Zone Temperature Simulator (REVISI DARK UI MINIMALIS) -->
+    <section id="cryosimulator" class="reveal-section py-24 border-t border-sky-100 dark:border-white/5 bg-gradient-to-b from-sky-50 to-white dark:bg-none dark:bg-[#05070c] relative w-full overflow-hidden reveal-element transition-colors duration-500">
+        <!-- Subtle Teal Grid Background for Dark Mode -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,165,233,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,165,233,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none transition-colors"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="px-4 py-1.5 rounded-full bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-700/50 text-cyan-700 dark:text-cyan-400 text-[10px] font-bold uppercase tracking-wider mb-4 inline-block">
+                    PRO-LABS INTERACTION
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Cryo-Zone Simulator</h2>
+                <p class="mt-4 text-slate-600 dark:text-slate-400">Geser tuas pengatur suhu di bawah ini untuk mensimulasikan sistem pendinginan cerdas HKA dan menemukan lingkungan pengawetan yang tepat untuk bisnis kuliner Anda.</p>
+            </div>
+
+            <!-- Main Container Minimalist Dark Box -->
+            <div class="bg-white dark:bg-[#0a0f1d] rounded-3xl p-8 md:p-12 shadow-xl shadow-sky-100 dark:shadow-none border border-sky-100 dark:border-[#1e293b] transition-colors">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: Control Column -->
+                    <div class="lg:col-span-6 space-y-8">
+                        <div>
+                            <label class="flex justify-between items-center text-sm font-semibold tracking-wide text-slate-500 dark:text-slate-400 uppercase mb-4">
+                                <span>Atur Target Suhu</span>
+                                <span id="slider-temp-badge" class="text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-transparent px-3 py-1 rounded-xl border border-cyan-100 dark:border-cyan-700 font-mono font-bold text-xs">
+                                    4°C
+                                </span>
+                            </label>
+                            <div class="relative pt-1">
+                                <input type="range" min="-40" max="30" value="4" id="temp-slider" 
+                                       class="w-full h-2 bg-slate-200 dark:bg-[#1e293b] rounded-lg appearance-none cursor-pointer outline-none transition-colors relative z-10">
+                                <div class="relative w-full h-4 mt-3 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-medium">
+                                    <span class="absolute left-0">-40°C (Shock Freeze)</span>
+                                    <span class="absolute left-[57.14%] -translate-x-1/2">0°C</span>
+                                    <span class="absolute right-0">30°C (Suhu Ruang)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Preservasi Bahan -->
+                        <div class="bg-slate-50 dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] rounded-2xl p-6 space-y-3 transition-colors">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">Status Preservasi Bahan</h4>
+                            <div id="sim-zone-title" class="text-xl font-bold text-slate-800 dark:text-white">Chilling Zone</div>
+                            <p id="sim-zone-desc" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Suhu ideal untuk sayur segar, keju, kue, susu cair, minuman kaleng, serta bahan segar yang siap diolah kembali.</p>
+                        </div>
+
+                        <!-- Rekomendasi Unit (Sekarang menjadi Dropdown Accordion) -->
+                        <div class="relative mt-2">
+                            <!-- Header / Clickable Trigger -->
+                            <div onclick="toggleSimDropdown()" class="cursor-pointer group flex items-center justify-between bg-white dark:bg-[#05070c] border border-sky-200 dark:border-[#1e293b] rounded-2xl p-4 transition-all hover:shadow-md hover:border-cyan-300 dark:hover:border-cyan-700/50">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-[#0a0f1d] border border-cyan-200 dark:border-white/5 flex items-center justify-center text-cyan-600 dark:text-cyan-400 text-lg transition-transform group-hover:scale-110">
+                                        <i class="fa-solid fa-industry" id="sim-unit-icon"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-0.5">Unit Rekomendasi (Klik untuk lihat)</p>
+                                        <p class="text-sm text-slate-800 dark:text-white font-bold transition-colors group-hover:text-cyan-600 dark:group-hover:text-cyan-400" id="sim-unit-name">Upright Chiller HKA-QC</p>
+                                    </div>
+                                </div>
+                                <div class="text-slate-400 dark:text-slate-500 shrink-0">
+                                    <i class="fa-solid fa-chevron-down transition-transform duration-300" id="sim-dropdown-icon"></i>
+                                </div>
+                            </div>
+
+                            <!-- Dropdown Mini Catalog -->
+                            <div id="sim-dropdown-content" class="hidden mt-3 bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] rounded-2xl shadow-lg shadow-sky-100/50 dark:shadow-none p-5 transition-all">
+                                <!-- Isi Mini Catalog dirender via JS -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right: Dynamic Virtual Unit Preview Minimalis -->
+                    <div class="lg:col-span-6 flex flex-col items-center justify-center relative min-h-[350px]">
+                        <!-- Glow Layer Hapus dari dark mode / dikurangi -->
+                        <div id="sim-glow-layer" class="absolute w-64 h-64 rounded-full bg-cyan-200/50 dark:bg-cyan-500/5 blur-[80px] transition-all duration-700"></div>
+
+                        <div class="relative bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] rounded-3xl p-6 md:p-8 w-full max-w-sm flex flex-col items-center justify-between shadow-xl shadow-sky-100 dark:shadow-none overflow-hidden min-h-[320px] transition-colors z-10">
+                            
+                            <!-- Control Panel (Kecil di dalam kotak) -->
+                            <div class="w-full bg-slate-100 dark:bg-[#0a0f1d] border border-sky-200 dark:border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center relative transition-colors mt-2">
+                                <div class="absolute top-3 left-4 flex items-center gap-1.5">
+                                    <span class="text-[9px] text-slate-500 dark:text-slate-600 font-bold uppercase tracking-wider">HKA Control Panel</span>
+                                </div>
+                                <span class="text-5xl font-extrabold tracking-widest text-cyan-500 dark:text-cyan-400 drop-shadow-none font-mono transition-all duration-100 mt-6" id="sim-temp-display">
+                                    4°C
+                                </span>
+                                <span class="text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-2 mb-1" id="sim-thermo-status">
+                                    ACTIVE - COMPRESSOR RUNNING
+                                </span>
+                            </div>
+
+                            <div class="my-6 text-center">
+                                <div id="cryo-icon-container" class="text-5xl text-cyan-400 dark:text-cyan-400 animate-pulse transition-all duration-500">
+                                    <i class="fa-solid fa-temperature-low"></i>
+                                </div>
+                                <div class="mt-4 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest" id="cryo-status-text">
+                                    Kondisi: Segar Bebas Beku
+                                </div>
+                            </div>
+
+                            <div id="ice-frost-overlay" class="absolute inset-0 bg-cyan-50/10 dark:bg-transparent pointer-events-none transition-all duration-700 opacity-0 border border-cyan-300/30 dark:border-transparent rounded-3xl"></div>
+                            
+                            <button onclick="triggerSimulatedAction()" class="w-full bg-sky-50 hover:bg-sky-100 dark:bg-[#111827] dark:hover:bg-[#1f2937] border border-sky-200 dark:border-white/5 text-[10px] text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl transition-all uppercase tracking-widest mt-auto">
+                                Cari Semua Katalog Unit ↓
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mengapa HKA Section -->
+    <section id="mengapa" class="reveal-section py-24 border-t border-sky-100 dark:border-white/5 bg-white dark:bg-[#020408] relative w-full reveal-element transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Standar Kualitas Hutama Karya Abadi</h2>
+                <p class="mt-4 text-slate-600 dark:text-slate-400">Setiap unit yang dipasarkan melalui TokoKitchen didukung sepenuhnya oleh sistem jaminan dan purnajual resmi HKA.</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-5xl mx-auto">
+                <div class="bg-sky-50 dark:bg-[#0a0f1d] border border-sky-100 dark:border-[#1e293b] rounded-2xl p-6 text-center transition-colors">
+                    <span class="text-3xl sm:text-4xl font-extrabold text-cyan-600 dark:text-cyan-400 block font-mono" id="stat-install" data-target="1500">0</span>
+                    <span class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Dapur Terinstalasi</span>
+                </div>
+                <div class="bg-sky-50 dark:bg-[#0a0f1d] border border-sky-100 dark:border-[#1e293b] rounded-2xl p-6 text-center transition-colors">
+                    <span class="text-3xl sm:text-4xl font-extrabold text-cyan-600 dark:text-cyan-400 block font-mono" id="stat-sat" data-target="99">0</span>
+                    <span class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">% Kepuasan Konsumen</span>
+                </div>
+                <div class="bg-sky-50 dark:bg-[#0a0f1d] border border-sky-100 dark:border-[#1e293b] rounded-2xl p-6 text-center transition-colors">
+                    <span class="text-3xl sm:text-4xl font-extrabold text-cyan-600 dark:text-cyan-400 block font-mono" id="stat-garansi" data-target="12">0</span>
+                    <span class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Bulan Garansi Penuh</span>
+                </div>
+                <div class="bg-sky-50 dark:bg-[#0a0f1d] border border-sky-100 dark:border-[#1e293b] rounded-2xl p-6 text-center transition-colors">
+                    <span class="text-3xl sm:text-4xl font-extrabold text-cyan-600 dark:text-cyan-400 block font-mono" id="stat-teknisi" data-target="24">0</span>
+                    <span class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1 block">Jam Siaga Support</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] shadow-sm shadow-sky-100 dark:shadow-none p-8 rounded-3xl hover:border-cyan-300 dark:hover:border-cyan-700/50 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-[#0a0f1d] flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-6 animate-pulse">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Garansi Resmi HKA</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Proteksi penuh mencakup garansi kompresor dan suku cadang asli yang ditangani langsung teknisi internal kami.</p>
+                </div>
+                <div class="bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] shadow-sm shadow-sky-100 dark:shadow-none p-8 rounded-3xl hover:border-cyan-300 dark:hover:border-cyan-700/50 transition-all duration-300" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-[#0a0f1d] flex items-center justify-center text-teal-600 dark:text-teal-400 mb-6">
+                        <i class="fa-solid fa-screwdriver-wrench text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Teknisi Berpengalaman</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Jaringan teknisi HKA siap membantu proses instalasi awal, pelatihan penggunaan, hingga perawatan berkala.</p>
+                </div>
+                <div class="bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] shadow-sm shadow-sky-100 dark:shadow-none p-8 rounded-3xl hover:border-cyan-300 dark:hover:border-cyan-700/50 transition-all duration-300" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-[#0a0f1d] flex items-center justify-center text-amber-600 dark:text-amber-400 mb-6">
+                        <i class="fa-solid fa-gears text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Ketersediaan Sparepart</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Suku cadang orisinal untuk seluruh tipe pendingin selalu tersedia melimpah di gudang pusat kami.</p>
+                </div>
+                <div class="bg-white dark:bg-[#05070c] border border-sky-100 dark:border-[#1e293b] shadow-sm shadow-sky-100 dark:shadow-none p-8 rounded-3xl hover:border-cyan-300 dark:hover:border-cyan-700/50 transition-all duration-300" style="transition-delay: 300ms;">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-[#0a0f1d] flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
+                        <i class="fa-solid fa-sheet-plastic text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Stainless Food Grade</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Semua unit menggunakan material SUS 304/201 premium standar dapur profesional, kuat, dan anti-karat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HKA HORECA ECOSYSTEM CROSS-SELLING BANNER (REVISI DARK UI CTA) -->
+    <section class="py-16 w-full relative overflow-hidden bg-gradient-to-r from-emerald-50 to-cyan-50 dark:bg-none dark:bg-[#020408] border-t border-emerald-100 dark:border-white/5 reveal-element transition-colors duration-500">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Card CTA: Solid Dark Base and subtle green outline for dark mode -->
+            <div class="bg-white/80 dark:bg-[#05070c] border border-emerald-200 dark:border-[#064e3b] rounded-3xl p-8 md:p-12 shadow-xl shadow-emerald-100 dark:shadow-none flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-sm transition-colors">
+                <div class="max-w-2xl text-center md:text-left">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-[#022c22] border border-emerald-200 dark:border-[#064e3b] text-emerald-700 dark:text-[#34d399] text-[10px] font-bold uppercase tracking-wider mb-4">
+                        <i class="fa-solid fa-cubes"></i>
+                        HKA HORECA ECOSYSTEM
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+                        Butuh Peralatan Dapur Komersial Lainnya?
+                    </h3>
+                    <p class="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Selain lini pendingin spesialis TokoKitchen, <strong>Hutama Karya Abadi</strong> juga menyediakan ribuan unit dapur komersial terlengkap. Temukan kompor gas bertekanan tinggi, mesin pemroses makanan, oven panggang otomatis, hingga meja stainless steel kustom di website utama kami.
+                    </p>
+                </div>
+                <div class="flex-shrink-0 w-full md:w-auto">
+                    <a href="https://hkahoreca.com" 
+                       target="_blank"
+                       class="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 dark:bg-none dark:bg-[#10b981] dark:hover:bg-[#059669] text-white font-bold px-8 py-4 rounded-xl transition-colors duration-300 shadow-lg shadow-emerald-200 dark:shadow-none">
+                        Kunjungi HKA Horeca 
+                        <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 dark:bg-[#05070c] border-t border-sky-100 dark:border-white/5 py-16 w-full relative z-10 reveal-element transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+                <div class="md:col-span-4 flex flex-col justify-between space-y-6">
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-snowflake text-cyan-500 dark:text-cyan-400"></i>
+                            Toko<span class="text-cyan-500 dark:text-cyan-400">Kitchen</span>
+                        </span>
+                        <p class="mt-4 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Penyedia resmi peralatan pendingin dapur komersial dan industrial. Lini spesialis dari Hutama Karya Abadi (HKA), menghadirkan teknologi pengawetan makanan terbaik dengan garansi resmi.
+                        </p>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-3">Sosial Media Resmi:</h5>
+                        <div class="flex items-center gap-3">
+                            <a href="https://instagram.com/hka_kitchen" target="_blank" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0a0f1d] hover:bg-sky-50 dark:hover:bg-[#1e293b] border border-sky-200 dark:border-[#1e293b] hover:border-cyan-300 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="https://facebook.com/hutama.kitchen" target="_blank" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0a0f1d] hover:bg-sky-50 dark:hover:bg-[#1e293b] border border-sky-200 dark:border-[#1e293b] hover:border-cyan-300 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://youtube.com/@cvhutamakaryaabadi-m6y" target="_blank" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0a0f1d] hover:bg-sky-50 dark:hover:bg-[#1e293b] border border-sky-200 dark:border-[#1e293b] hover:border-cyan-300 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                            <a href="https://tiktok.com" target="_blank" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0a0f1d] hover:bg-sky-50 dark:hover:bg-[#1e293b] border border-sky-200 dark:border-[#1e293b] hover:border-cyan-300 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                <i class="fa-brands fa-tiktok"></i>
+                            <a href="https://www.linkedin.com/in/hutama-karya-abadi-b7905b377/" target="_blank" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0a0f1d] hover:bg-sky-50 dark:hover:bg-[#1e293b] border border-sky-200 dark:border-[#1e293b] hover:border-cyan-300 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                <i class="fa-brands fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <h4 class="text-slate-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-6">Menu TokoKitchen</h4>
+                    <ul class="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+                        <li>
+                            <a href="#home" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-angle-right text-cyan-500 dark:text-cyan-400 text-xs"></i>
+                                Beranda Utama
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#kategori" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-angle-right text-cyan-500 dark:text-cyan-400 text-xs"></i>
+                                Kategori Unit
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#produk" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-angle-right text-cyan-500 dark:text-cyan-400 text-xs"></i>
+                                Katalog Produk (18)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#cryosimulator" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-angle-right text-cyan-500 dark:text-cyan-400 text-xs"></i>
+                                Cryo-Zone Simulator
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#mengapa" class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-angle-right text-cyan-500 dark:text-cyan-400 text-xs"></i>
+                                Mengapa Kami
+                            </a>
+                        </li>
+                        <li class="border-t border-sky-100 dark:border-[#1e293b] pt-2">
+                            <a href="https://hkahoreca.com" target="_blank" class="text-emerald-600 hover:text-emerald-500 dark:text-[#34d399] dark:hover:text-[#10b981] font-bold transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                Main Web HKA ↗
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-3 space-y-6">
+                   <div>
+                        <h4 class="text-slate-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-4">Head Office</h4>
+                        <a href="https://maps.app.goo.gl/7nEKQNHhjLY6u7TR7" 
+                        target="_blank" 
+                        class="flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                            <i class="fa-solid fa-location-dot text-cyan-500 dark:text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span>Jl. Raya Perjuangan, RT.002/RW.001, Tlk. Pucung, Kec. Bekasi Utara, Kota Bks, Jawa Barat 17121</span>
+                        </a>
+                    </div>
+
+                    <div>
+                        <h4 class="text-slate-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-4">Branch Office</h4>
+                        <a href="https://maps.app.goo.gl/Z56fcHQFr3BC496RA" 
+                        target="_blank" 
+                        class="flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                            <i class="fa-solid fa-location-dot text-cyan-500 dark:text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span>Jl. Mertasari No.2F, Sidakarya, Denpasar Selatan, Kota Denpasar, Bali 80224</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3 space-y-6">
+                    <div>
+                        <h4 class="text-slate-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-4">Hubungi Sales</h4>
+                        <ul class="space-y-3.5 text-xs text-slate-600 dark:text-slate-400">
+                            <li>
+                                <a href="https://wa.me/6282111506069?text=Halo%20TokoKitchen%20HKA%2C%20saya%20ingin%20berkonsultasi%20mengenai%20kebutuhan%20unit%20pendingin%20dapur." 
+                                   target="_blank" class="flex items-center gap-2.5 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                    <i class="fa-brands fa-whatsapp text-lg text-emerald-500 dark:text-[#34d399] flex-shrink-0"></i>
+                                    <div>
+                                        <p class="font-bold text-slate-900 dark:text-white text-xs">WhatsApp 1</p>
+                                        <p>0821-1150-6069</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://wa.me/628159691422?text=Halo%20TokoKitchen%20HKA%2C%20saya%20ingin%20berkonsultasi%20mengenai%20kebutuhan%20unit%20pendingin%20dapur." 
+                                   target="_blank" class="flex items-center gap-2.5 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                                    <i class="fa-brands fa-whatsapp text-lg text-emerald-500 dark:text-[#34d399] flex-shrink-0"></i>
+                                    <div>
+                                        <p class="font-bold text-slate-900 dark:text-white text-xs">WhatsApp 2</p>
+                                        <p>0815-9691-422</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-slate-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-3">Email Respon</h4>
+                        <a href="mailto:hello.hutamakaryaabadi@gmail.com" class="flex items-center gap-2.5 text-xs text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-all">
+                            <i class="fa-solid fa-envelope text-cyan-500 dark:text-cyan-400 flex-shrink-0"></i>
+                            <span>hello.hutamakaryaabadi@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-sky-100 dark:border-[#1e293b] mt-12 pt-8 text-center">
+                <p class="text-xs text-slate-500 tracking-wide">
+                    &copy; 2026 TokoKitchen by Hutama Karya Abadi. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript logic -->
+    <script>
+
+                const pemicuScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Begitu section masuk layar, langsung aktifkan efeknya
+                    entry.target.classList.add('active');
+                    // Stop mengawasi section ini agar animasinya cuma jalan sekali
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { 
+            threshold: 0.12 // Animasi mulai jalan pas 12% bagian section nongol di layar
+        });
+
+        // Suruh sensor mengawasi semua section yang mau dianimasikan
+        document.querySelectorAll('.reveal-section').forEach(sec => pemicuScroll.observe(sec));
+
+
+        // --- THEME TOGGLE LOGIC (LIGHT / DARK) ---
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            const iconDesktop = document.getElementById('theme-icon');
+            const iconMobile = document.getElementById('theme-icon-mobile');
+            const newIconClass = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            
+            iconDesktop.className = newIconClass;
+            iconMobile.className = newIconClass;
+        }
+
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.getElementById('theme-icon').className = 'fa-solid fa-moon';
+            document.getElementById('theme-icon-mobile').className = 'fa-solid fa-moon';
+        }
+
+        const productsData = [
+            {
+                id: 1,
+                name: "Blast Chiller & Shock Freezer",
+                brand: "ALISA",
+                category: "blast",
+                tempRange: "-18°C s.d -39°C",
+                variants: [
+                    { model: "ALISA 3", p: 820, l: 900, t: 930, kapasitas: "3 tray", daya: "1300W/1P", harga: 49000000, image: "assets/images/alisa-3.jpg" },
+                    { model: "ALISA 14 (5 Tray)", p: 820, l: 900, t: 1030, kapasitas: "5 tray", daya: "1600W/3P", harga: 53000000, image: "assets/images/alisa-14.jpg" },
+                    { model: "ALISA 14 (10 Tray)", p: 820, l: 900, t: 1660, kapasitas: "10 tray", daya: "2850W/3P", harga: 77000000, image: "assets/images/alisa-14-10tray.jpg" },
+                    { model: "ALISA 24 (14 Tray)", p: 820, l: 900, t: 1930, kapasitas: "14 tray", daya: "3800W/3P", harga: 95000000, image: "assets/images/alisa-24.jpg" },
+                    { model: "ALISA 24 (24 Tray)", p: 820, l: 900, t: 1930, kapasitas: "24 tray", daya: "4840W/3P", harga: 155000000, image: "assets/images/alisa-24-24tray.jpg" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Glass Door Stainless Steel Under Counter Chiller",
+                brand: "NTGO - Import",
+                category: "undercounter",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "NTGO-12-2L", p: 1200, l: 750, t: 850, kapasitas: "310 L", daya: "350W/220V", harga: 18000000, image: "assets/images/ntgo-12-2l.jpg" },
+                    { model: "NTGO-15-2L", p: 1500, l: 750, t: 850, kapasitas: "360 L", daya: "420W/220V", harga: 20000000, image: "assets/images/ntgo-15-2l.jpg" },
+                    { model: "NTGO-18-2L (3 DOOR)", p: 1800, l: 750, t: 850, kapasitas: "400 L", daya: "450W/220V", harga: 21500000, image: "assets/images/ntgo-18-2l.jpg" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Glass Door Upright Chiller",
+                brand: "NTGO - Import",
+                category: "upright",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "NTGO-0.5-L2F (2 DOOR)", p: 600, l: 730, t: 1955, kapasitas: "500 L", daya: "490W/220V", harga: 24500000, image: "assets/images/ntgo-0.5.jpg" },
+                    { model: "NTGO-1.0-L4F (4 DOOR)", p: 1200, l: 730, t: 1955, kapasitas: "1000 L", daya: "590W/220V", harga: 31000000, image: "assets/images/ntgo-1.0.jpg" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Under Counter Chiller + Drawer",
+                brand: "EC-LGD",
+                category: "undercounter",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "EC-15-2LGD (6 drawer)", p: 1500, l: 750, t: 850, kapasitas: "350 L", daya: "460W/220V", harga: 35800000, image: "assets/images/ec-15-2lgd.jpg" },
+                    { model: "EC-18-2LGD (9 drawer)", p: 1800, l: 750, t: 850, kapasitas: "450 L", daya: "480W/220V", harga: 46000000, image: "assets/images/ec-18-2lgd.jpg" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Upright Freezer",
+                brand: "HKA-QD - Import",
+                category: "upright",
+                tempRange: "-18°C s.d -20°C",
+                variants: [
+                    { model: "QD-0.5-L2F", p: 600, l: 730, t: 1955, kapasitas: "500 L", daya: "400W/220V", harga: 23200000, image: "assets/images/qd-0.5.jpg" },
+                    { model: "QD-1.0-L2F", p: 1200, l: 730, t: 1955, kapasitas: "1000 L", daya: "800W/220V", harga: 28000000, image: "assets/images/qd-1.0.jpg" },
+                    { model: "QD-1.6-L2F", p: 1800, l: 730, t: 1955, kapasitas: "1500 L", daya: "950W/220V", harga: 39500000, image: "assets/images/qd-1.6.jpg" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Upright Chiller",
+                brand: "HKA-QC - Import",
+                category: "upright",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "QC-0.5-L2F", p: 600, l: 730, t: 1955, kapasitas: "500 L", daya: "360W/220V", harga: 20000000, image: "assets/images/qc-0.5.jpg" },
+                    { model: "QC-1.0-L4F", p: 1200, l: 730, t: 1955, kapasitas: "1000 L", daya: "490W/220V", harga: 25500000, image: "assets/images/qc-1.0.jpg" },
+                    { model: "QC-1.6-L6F", p: 1800, l: 730, t: 1955, kapasitas: "1500 L", daya: "850W/220V", harga: 36000000, image: "assets/images/qc-1.6.jpg" }
+                ]
+            },
+            {
+                id: 7,
+                name: "Under Counter Chiller 60cm",
+                brand: "HKA-ELL",
+                category: "undercounter",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "EL-12-2L", p: 1200, l: 600, t: 850, kapasitas: "250 L", daya: "450W/220V", harga: 17500000, image: "assets/images/el-12-2l.jpg" },
+                    { model: "EL-15-2L", p: 1500, l: 600, t: 850, kapasitas: "310 L", daya: "470W/220V", harga: 18500000, image: "assets/images/el-15-2l.jpg" },
+                    { model: "EL-18-2L", p: 1800, l: 600, t: 850, kapasitas: "360 L", daya: "520W/220V", harga: 19500000, image: "assets/images/el-18-2l.jpg" }
+                ]
+            },
+            {
+                id: 8,
+                name: "Under Counter Chiller 75cm",
+                brand: "HKA-ECL",
+                category: "undercounter",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "EC-12-2L", p: 1200, l: 750, t: 850, kapasitas: "310 L", daya: "450W/220V", harga: 17200000, image: "assets/images/ecl-12-2l.jpg" },
+                    { model: "EC-15-2L", p: 1500, l: 750, t: 850, kapasitas: "360 L", daya: "470W/220V", harga: 18500000, image: "assets/images/ecl-15-2l.jpg" },
+                    { model: "EC-18-2L", p: 1800, l: 750, t: 850, kapasitas: "400 L", daya: "520W/220V", harga: 19500000, image: "assets/images/ecl-18-2l.jpg" }
+                ]
+            },
+            {
+                id: 9,
+                name: "Under Counter Freezer",
+                brand: "HKA-EDL",
+                category: "undercounter",
+                tempRange: "-18°C",
+                variants: [
+                    { model: "ED-12-2L", p: 1200, l: 750, t: 850, kapasitas: "310 L", daya: "540W/220V", harga: 18500000, image: "assets/images/ed-12-2l.jpg" },
+                    { model: "ED-15-2L", p: 1500, l: 750, t: 850, kapasitas: "360 L", daya: "670W/220V", harga: 20000000, image: "assets/images/ed-15-2l.jpg" },
+                    { model: "ED-18-2L", p: 1800, l: 750, t: 850, kapasitas: "400 L", daya: "670W/220V", harga: 22000000, image: "assets/images/ed-18-2l.jpg" }
+                ]
+            },
+            {
+                id: 10,
+                name: "Sliding Curve Glass Freezer",
+                brand: "HKA-FLV - Made in Indonesia",
+                category: "freezer",
+                tempRange: "-10°C s.d -20°C",
+                variants: [
+                    { model: "F-120SD LV", p: 611, l: 539, t: 873, kapasitas: "120 L", daya: "110W/220V", harga: 3650000, image: "assets/images/f-120sd.jpg" },
+                    { model: "F-210SD LV", p: 925, l: 539, t: 873, kapasitas: "210 L", daya: "140W/220V", harga: 4400000, image: "assets/images/f-210sd.jpg" },
+                    { model: "F-330SD LV", p: 1224, l: 654, t: 840, kapasitas: "330 L", daya: "185W/220V", harga: 6250000, image: "assets/images/f-330sd.jpg" }
+                ]
+            },
+            {
+                id: 11,
+                name: "Chest Freezer Low Watt",
+                brand: "HKA-FLV - Made in Indonesia",
+                category: "freezer",
+                tempRange: "-10°C s.d -20°C",
+                variants: [
+                    { model: "F-200 LV", p: 925, l: 539, t: 873, kapasitas: "200 L", daya: "90W/220V", harga: 3450000, image: "assets/images/f-200lv.jpg" },
+                    { model: "F-300 LV", p: 1105, l: 539, t: 873, kapasitas: "300 L", daya: "140W/220V", harga: 4100000, image: "assets/images/f-300lv.jpg" },
+                    { model: "F-600 LV", p: 1665, l: 765, t: 935, kapasitas: "600 L", daya: "280W/220V", harga: 8150000, image: "assets/images/f-600lv.jpg" }
+                ]
+            },
+            {
+                id: 12,
+                name: "Display Cooler Fresca",
+                brand: "FRESCA - Made in Indonesia",
+                category: "showcase",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "FRESCA 195 CS", p: 530, l: 510, t: 1135, kapasitas: "195 L", daya: "170W/220V", harga: 4500000, image: "assets/images/fresca-195cs.jpg" },
+                    { model: "FRESCA 225 CS", p: 530, l: 510, t: 1547, kapasitas: "225 L", daya: "185W/220V", harga: 4900000, image: "assets/images/fresca-225cs.jpg" },
+                    { model: "FRESCA 1000", p: 1253, l: 750, t: 2050, kapasitas: "1000 L", daya: "546W/220V", harga: 18500000, image: "assets/images/fresca-1000.jpg" }
+                ]
+            },
+            {
+                id: 13,
+                name: "Chest Freezer Double Solid Door",
+                brand: "HKA-F - Import",
+                category: "freezer",
+                tempRange: "-10°C s.d -20°C",
+                variants: [
+                    { model: "Spesifikasi 420L", p: 1200, l: 780, t: 880, kapasitas: "420 L", daya: "165W/220V", harga: 7500000, image: "assets/images/chest-double-420l.jpg" },
+                    { model: "Spesifikasi 550L", p: 1460, l: 720, t: 880, kapasitas: "550 L", daya: "260W/220V", harga: 8800000, image: "assets/images/chest-double-550l.jpg" },
+                    { model: "Spesifikasi 650L", p: 1720, l: 720, t: 880, kapasitas: "650 L", daya: "400W/220V", harga: 10000000, image: "assets/images/chest-double-650l.jpg" },
+                    { model: "Spesifikasi 850L", p: 1960, l: 720, t: 880, kapasitas: "850 L", daya: "300W/220V", harga: 12000000, image: "assets/images/chest-double-850l.jpg" }
+                ]
+            },
+            {
+                id: 14,
+                name: "Sliding Flat Glass Freezer",
+                brand: "HKA-F - Import",
+                category: "freezer",
+                tempRange: "-10°C s.d -20°C",
+                variants: [
+                    { model: "Spesifikasi 434L", p: 1200, l: 670, t: 880, kapasitas: "434 L", daya: "165W/220V", harga: 6800000, image: "assets/images/sliding-flat-434l.jpg" },
+                    { model: "Spesifikasi 519L", p: 1400, l: 670, t: 880, kapasitas: "519 L", daya: "260W/220V", harga: 7200000, image: "assets/images/sliding-flat-519l.jpg" },
+                    { model: "Spesifikasi 603L", p: 1600, l: 800, t: 880, kapasitas: "603 L", daya: "440W/220V", harga: 8500000, image: "assets/images/sliding-flat-603l.jpg" },
+                    { model: "Spesifikasi 688L", p: 1800, l: 800, t: 880, kapasitas: "688 L", daya: "300W/220V", harga: 9800000, image: "assets/images/sliding-flat-688l.jpg" }
+                ]
+            },
+            {
+                id: 15,
+                name: "Chest Freezer Triple Door Bottom",
+                brand: "HKA-F - Import",
+                category: "freezer",
+                tempRange: "-10°C s.d -20°C",
+                variants: [
+                    { model: "Spesifikasi 420L", p: 1200, l: 780, t: 880, kapasitas: "420 L", daya: "165W/220V", harga: 6450000, image: "assets/images/chest-triple-420l.jpg" },
+                    { model: "Spesifikasi 490L", p: 1500, l: 780, t: 880, kapasitas: "490 L", daya: "260W/220V", harga: 7150000, image: "assets/images/chest-triple-490l.jpg" },
+                    { model: "Spesifikasi 650L", p: 1800, l: 780, t: 940, kapasitas: "650 L", daya: "400W/220V", harga: 8600000, image: "assets/images/chest-triple-650l.jpg" },
+                    { model: "Spesifikasi 790L", p: 2000, l: 860, t: 940, kapasitas: "790 L", daya: "300W/220V", harga: 11500000, image: "assets/images/chest-triple-790l.jpg" }
+                ]
+            },
+            {
+                id: 16,
+                name: "Display Cooler Tipe Kanopi Atas",
+                brand: "HKAPWC - Import",
+                category: "showcase",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "Model 1 Pintu", p: 600, l: 620, t: 1910, kapasitas: "420 L", daya: "450W/220V", harga: 7900000, image: "assets/images/display-cooler-hkapwc-1.jpeg" },
+                    { model: "Model 2 Pintu", p: 1200, l: 620, t: 1910, kapasitas: "835 L", daya: "600W/220V", harga: 15700000, image: "assets/images/display-cooler-hkapwc-2.jpeg" },
+                    { model: "Model 3 Pintu", p: 1800, l: 620, t: 1910, kapasitas: "1300 L", daya: "760W/220V", harga: 23000000, image: "assets/images/display-cooler-hkapwc-3.jpeg" }
+                ]
+            },
+            {
+                id: 17,
+                name: "Display Cooler Tipe Tanpa Kanopi",
+                brand: "HKAPWC - Import",
+                category: "showcase",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "DC-110", p: 600, l: 620, t: 1920, kapasitas: "420 L", daya: "450W/220V", harga: 8800000, image: "assets/images/dc-110.jpg" },
+                    { model: "DC-120", p: 1200, l: 620, t: 1920, kapasitas: "835 L", daya: "600W/220V", harga: 12500000, image: "assets/images/dc-120.jpg" },
+                    { model: "DC-130", p: 1800, l: 620, t: 1920, kapasitas: "1300 L", daya: "760W/220V", harga: 19000000, image: "assets/images/dc-130.jpg" }
+                ]
+            },
+            {
+                id: 18,
+                name: "Cake Showcase RLB Series",
+                brand: "HKARLB",
+                category: "showcase",
+                tempRange: "+2°C s.d +8°C",
+                variants: [
+                    { model: "Model Lebar 90 cm", p: 900, l: 680, t: 1200, kapasitas: "360 L", daya: "487W/220V", harga: 30000000, image: "assets/images/hkarlb-90cm.jpg" },
+                    { model: "Model Lebar 120 cm", p: 1200, l: 680, t: 1200, kapasitas: "462 L", daya: "668W/220V", harga: 33000000, image: "assets/images/hkarlb-120cm.jpg" },
+                    { model: "Model Lebar 150 cm", p: 1500, l: 680, t: 1200, kapasitas: "626 L", daya: "862W/220V", harga: 36000000, image: "assets/images/hkarlb-150cm.jpg" }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+        let currentSort = 'default';
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            let filtered = productsData.filter(p => {
+                const matchesTab = (currentFilter === 'all' || p.category === currentFilter);
+                const query = currentSearchQuery.toLowerCase();
+                const matchesSearch = p.name.toLowerCase().includes(query) || 
+                                      p.brand.toLowerCase().includes(query) ||
+                                      p.variants.some(v => v.model.toLowerCase().includes(query));
+                return matchesTab && matchesSearch;
+            });
+
+            if (currentSort === 'asc') {
+                filtered.sort((a, b) => (a.variants[0].harga * 0.8) - (b.variants[0].harga * 0.8));
+            } else if (currentSort === 'desc') {
+                filtered.sort((a, b) => (b.variants[0].harga * 0.8) - (a.variants[0].harga * 0.8));
+            } else {
+                filtered.sort((a, b) => a.id - b.id);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa-solid fa-wind text-5xl text-slate-400 dark:text-slate-600 mb-4 animate-pulse"></i>
+                        <p class="text-slate-500 dark:text-slate-400 font-medium text-lg">Unit yang Anda cari tidak ditemukan.</p>
+                        <button onclick="resetFilters()" class="mt-4 px-5 py-2.5 rounded-full bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-300 dark:border-cyan-700/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold transition-all hover:bg-cyan-200">
+                            Reset Pencarian & Filter
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const activeVar = p.variants[0];
+                const diskonHarga = activeVar.harga * 0.8;
+
+                // WRAPPER BARU: Memisahkan aura glow dan kartu utama
+                const wrapper = document.createElement('div');
+                wrapper.className = "relative group reveal-element active h-full";
+                wrapper.id = `prod-card-wrap-${p.id}`;
+
+                let optionsHtml = '';
+                p.variants.forEach((v, index) => {
+                    optionsHtml += `<option value="${index}" class="bg-white dark:bg-[#05070c] text-slate-800 dark:text-slate-200">${v.model} (${v.kapasitas})</option>`;
+                });
+
+                wrapper.innerHTML = `
+                    <!-- EFEK AURA DINGIN (Hanya muncul saat di-hover dan ada di belakang kartu) -->
+                    <div class="absolute -inset-1.5 rounded-[2.5rem] bg-gradient-to-br from-cyan-300 via-blue-400 to-sky-300 dark:from-[rgba(6,182,212,0.6)] dark:via-[rgba(59,130,246,0.6)] dark:to-[rgba(14,165,233,0.6)] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 z-0 pointer-events-none group-hover:animate-pulse"></div>
+                    
+                    <!-- KARTU UTAMA (Solid, melindungi teks dari blur aura di belakangnya) -->
+                    <div id="prod-card-${p.id}" class="relative bg-white dark:bg-[#0a0f1d] border border-sky-100 dark:border-[#1e293b] shadow-lg shadow-sky-100/50 dark:shadow-none rounded-3xl p-6 flex flex-col justify-between h-full z-10 transition-all duration-500 group-hover:-translate-y-2 group-hover:border-cyan-300 dark:group-hover:border-cyan-500/50">
+                        <div class="relative z-10">
+                            <div class="relative bg-white dark:bg-[#05070c] border border-sky-50 dark:border-white/5 rounded-2xl mb-6 flex items-center justify-center h-64 overflow-hidden group/img transition-colors">
+                                <span class="absolute top-3 left-3 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 text-[10px] font-extrabold px-3 py-1 rounded-full border border-cyan-200 dark:border-cyan-700/50 uppercase tracking-wide z-10">
+                                    ${p.category.toUpperCase()}
+                                </span>
+                                <span class="absolute top-3 right-3 bg-red-500/90 text-white text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wide z-10 shadow-lg shadow-red-500/20">
+                                    -20% OFF
+                                </span>
+                                <img id="img-${p.id}" 
+                                    src="${activeVar.image}" 
+                                    onerror="this.src='https://placehold.co/400x300/e2e8f0/06b6d4?text=${encodeURIComponent(p.brand)}'; if(document.documentElement.classList.contains('dark')) this.src='https://placehold.co/400x300/0a0f1d/06b6d4?text=${encodeURIComponent(p.brand)}'" 
+                                    alt="${activeVar.model}" 
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110 relative z-0">
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-0.5 leading-tight">${p.name}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold tracking-wider mb-4">${p.brand}</p>
+                            
+                            <div class="mb-5 relative z-20">
+                                <label class="block text-[10px] text-slate-500 dark:text-slate-500 font-bold uppercase tracking-wider mb-2">Pilih Kapasitas / Tipe Unit:</label>
+                                <div class="relative">
+                                    <select onchange="updateProductVariant(${p.id}, this.value)" class="w-full bg-white dark:bg-[#05070c] border border-sky-200 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-800 dark:text-slate-300 outline-none focus:border-cyan-500 dark:focus:border-cyan-500 cursor-pointer appearance-none transition-colors">
+                                        ${optionsHtml}
+                                    </select>
+                                    <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 text-xs">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl p-3 mb-4 transition-colors">
+                                <div class="flex items-center gap-1.5 mb-1 text-red-600 dark:text-red-400">
+                                    <i class="fa-solid fa-tags text-[10px]"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider">Promo Khusus Website</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-slate-400 dark:text-slate-500 line-through decoration-red-400 dark:decoration-red-500/50" id="price-original-${p.id}">${formatRupiah(activeVar.harga)}</span>
+                                    <span class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400" id="price-discount-${p.id}">${formatRupiah(diskonHarga)}</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-sky-50 dark:border-[#1e293b] pt-4 mb-6 transition-colors">
+                                <ul class="space-y-2.5 text-xs text-slate-600 dark:text-slate-400" id="spec-list-${p.id}">
+                                    <li class="flex justify-between">
+                                        <span class="font-medium text-slate-500">Dimensi (P x L x T):</span>
+                                        <span class="text-slate-800 dark:text-slate-300 font-semibold">${activeVar.p} x ${activeVar.l} x ${activeVar.t} mm</span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="font-medium text-slate-500">Kapasitas:</span>
+                                        <span class="text-slate-800 dark:text-slate-300 font-bold text-cyan-600 dark:text-cyan-400">${activeVar.kapasitas}</span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="font-medium text-slate-500">Daya Listrik:</span>
+                                        <span class="text-slate-800 dark:text-slate-300 font-semibold">${activeVar.daya}</span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="font-medium text-slate-500">Rentang Suhu:</span>
+                                        <span class="text-cyan-600 dark:text-cyan-400 font-extrabold">${p.tempRange}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <button id="wa-btn-${p.id}" onclick="sendWaInquiry('${p.name} - Tipe ${activeVar.model} (${activeVar.kapasitas})', '${formatRupiah(diskonHarga)}')" 
+                                class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 dark:bg-none dark:bg-[#10b981] dark:hover:bg-[#059669] text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-md relative z-20">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            Klaim Harga Diskon via WA
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(wrapper);
+            });
+        }
+
+        function updateProductVariant(productId, variantIndex) {
+            const p = productsData.find(item => item.id === productId);
+            const variant = p.variants[variantIndex];
+            const diskonHarga = variant.harga * 0.8;
+
+            const imgElement = document.getElementById(`img-${productId}`);
+            imgElement.src = variant.image;
+            imgElement.onerror = function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                this.src = isDark 
+                    ? `https://placehold.co/400x300/0a0f1d/06b6d4?text=${encodeURIComponent(variant.model)}`
+                    : `https://placehold.co/400x300/e2e8f0/06b6d4?text=${encodeURIComponent(variant.model)}`;
+            };
+
+            document.getElementById(`price-original-${productId}`).textContent = formatRupiah(variant.harga);
+            document.getElementById(`price-discount-${productId}`).textContent = formatRupiah(diskonHarga);
+
+            const specList = document.getElementById(`spec-list-${productId}`);
+            specList.innerHTML = `
+                <li class="flex justify-between">
+                    <span class="font-medium text-slate-500">Dimensi (P x L x T):</span>
+                    <span class="text-slate-800 dark:text-slate-300 font-semibold">${variant.p} x ${variant.l} x ${variant.t} mm</span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="font-medium text-slate-500">Kapasitas:</span>
+                    <span class="text-slate-800 dark:text-slate-300 font-bold text-cyan-600 dark:text-cyan-400">${variant.kapasitas}</span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="font-medium text-slate-500">Daya Listrik:</span>
+                    <span class="text-slate-800 dark:text-slate-300 font-semibold">${variant.daya}</span>
+                </li>
+                <li class="flex justify-between">
+                    <span class="font-medium text-slate-500">Rentang Suhu:</span>
+                    <span class="text-cyan-600 dark:text-cyan-400 font-extrabold">${p.tempRange}</span>
+                </li>
+            `;
+
+            const waButton = document.getElementById(`wa-btn-${productId}`);
+            waButton.setAttribute('onclick', `sendWaInquiry('${p.name} - Tipe ${variant.model} (${variant.kapasitas})', '${formatRupiah(diskonHarga)}')`);
+            
+            const cardElement = document.getElementById(`prod-card-${productId}`);
+            cardElement.classList.add('shadow-cyan-200');
+            imgElement.classList.add('scale-95', 'opacity-50');
+            setTimeout(() => {
+                cardElement.classList.remove('shadow-cyan-200');
+                imgElement.classList.remove('scale-95', 'opacity-50');
+            }, 300);
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+            
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-cyan-500', 'dark:bg-[#06b6d4]', 'text-white', 'dark:text-black', 'active', 'font-bold');
+                tab.classList.add('bg-white', 'dark:bg-[#111827]', 'hover:bg-sky-50', 'dark:hover:bg-[#1f2937]', 'border', 'border-sky-200', 'dark:border-white/5', 'text-slate-600', 'dark:text-slate-300', 'font-semibold', 'shadow-sm', 'dark:shadow-none');
+            });
+
+            const activeTab = document.getElementById(`tab-${category}`);
+            if (activeTab) {
+                activeTab.classList.remove('bg-white', 'dark:bg-[#111827]', 'hover:bg-sky-50', 'dark:hover:bg-[#1f2937]', 'border', 'border-sky-200', 'dark:border-white/5', 'text-slate-600', 'dark:text-slate-300', 'font-semibold', 'shadow-sm', 'dark:shadow-none');
+                activeTab.classList.add('bg-cyan-500', 'dark:bg-[#06b6d4]', 'text-white', 'dark:text-black', 'active', 'font-bold');
+            }
+
+            renderCatalog();
+        }
+
+        function searchProducts() {
+            const input = document.getElementById('product-search-input');
+            currentSearchQuery = input.value;
+            renderCatalog();
+        }
+
+        function sortProducts() {
+            currentSort = document.getElementById('product-sort-select').value;
+            renderCatalog();
+        }
+
+        function resetFilters() {
+            document.getElementById('product-search-input').value = '';
+            document.getElementById('product-sort-select').value = 'default';
+            currentSearchQuery = '';
+            currentSort = 'default';
+            filterCategory('all');
+        }
+
+        function sendWaInquiry(productDetail, price) {
+            const phoneNumber = "6282111506069"; 
+            const message = `Halo TokoKitchen HKA, saya ingin klaim *Promo Khusus Website (-20%)*.\n\nMohon info stok, & pengiriman untuk:\n*Produk:* ${productDetail}\n*Harga Diskon Web:* ${price}\n\nTerima kasih!`;
+            const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+
+        // ==========================================
+        // REVISI CRYO-ZONE SIMULATOR JAVASCRIPT
+        // ==========================================
+        const tempSlider = document.getElementById('temp-slider');
+        const tempDisplay = document.getElementById('sim-temp-display');
+        const thermoStatus = document.getElementById('sim-thermo-status');
+        const zoneTitle = document.getElementById('sim-zone-title');
+        const zoneDesc = document.getElementById('sim-zone-desc');
+        const unitIcon = document.getElementById('sim-unit-icon');
+        const unitName = document.getElementById('sim-unit-name');
+        const cryoIconContainer = document.getElementById('cryo-icon-container');
+        const cryoStatusText = document.getElementById('cryo-status-text');
+        const iceFrostOverlay = document.getElementById('ice-frost-overlay');
+        const simGlowLayer = document.getElementById('sim-glow-layer');
+        const sliderTempBadge = document.getElementById('slider-temp-badge');
+
+        let currentSimProductId = 6;
+        let isSimDropdownOpen = false;
+        window.simVariantMap = {};
+
+        tempSlider.addEventListener('input', (e) => {
+            const tempVal = parseInt(e.target.value);
+            tempDisplay.textContent = `${tempVal}°C`;
+            sliderTempBadge.textContent = `${tempVal}°C`;
+            updateSimulatorState(tempVal);
+        });
+
+        function updateSimulatorState(temp) {
+            if (temp > 15) {
+                thermoStatus.textContent = "COMPRESSOR IDLE - WARNING WARM TEMP";
+                thermoStatus.className = "text-[9px] text-red-500 dark:text-red-400 font-bold tracking-widest uppercase mt-2 mb-1";
+                zoneTitle.textContent = "Warm Room Temp (Zona Tidak Aman)";
+                zoneDesc.textContent = "Suhu luar ruangan normal. Sangat rawan pembusukan bakteri bagi bahan kuliner sensitif seperti susu segar, daging segar, ikan, dan kue basah.";
+                unitName.textContent = "AC Dapur Utama HKA";
+                unitIcon.className = "fa-solid fa-triangle-exclamation text-amber-500";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+                cryoIconContainer.className = "text-5xl text-amber-500 animate-bounce transition-all duration-500";
+                cryoStatusText.textContent = "Kondisi: Rawan Rusak & Berbakteri";
+                iceFrostOverlay.style.opacity = "0";
+                iceFrostOverlay.style.backdropFilter = "blur(0px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, rgba(5,7,12,0) 70%)";
+                currentSimProductId = null;
+            } 
+            else if (temp >= 5 && temp <= 15) {
+                thermoStatus.textContent = "ACTIVE - OPTIMIZED BEVERAGE MODE";
+                thermoStatus.className = "text-[9px] text-teal-600 dark:text-teal-400 font-bold tracking-widest uppercase mt-2 mb-1";
+                zoneTitle.textContent = "Beverage & Display Zone";
+                zoneDesc.textContent = "Suhu sempurna untuk buah-buahan tropis, kue-kue premium, minuman kaleng, sayuran segar sensitif, dan saus dapur agar kesegarannya tidak layu.";
+                unitName.textContent = "Display Cooler FRESCA";
+                unitIcon.className = "fa-solid fa-wine-glass text-cyan-500 dark:text-cyan-400";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-bottle-water"></i>';
+                cryoIconContainer.className = "text-5xl text-emerald-500 dark:text-emerald-400 animate-pulse transition-all duration-500";
+                cryoStatusText.textContent = "Kondisi: Dingin Sempurna & Segar";
+                iceFrostOverlay.style.opacity = "0.1";
+                iceFrostOverlay.style.backdropFilter = "blur(1px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, rgba(5,7,12,0) 70%)";
+                currentSimProductId = 12;
+            }
+            else if (temp >= 0 && temp < 5) {
+                thermoStatus.textContent = "ACTIVE - OPTIMUM CHILLING CYCLE";
+                thermoStatus.className = "text-[9px] text-cyan-600 dark:text-cyan-400 font-bold tracking-widest uppercase mt-2 mb-1";
+                zoneTitle.textContent = "Standard Chilling Zone";
+                zoneDesc.textContent = "Zona krusial dapur komersial. Suhu wajib bagi keju premium, adonan kue, susu cair, dan daging marinasi siap masak.";
+                unitName.textContent = "Upright Chiller HKA-QC";
+                unitIcon.className = "fa-solid fa-refrigerator text-cyan-500 dark:text-cyan-400";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-temperature-low"></i>';
+                cryoIconContainer.className = "text-5xl text-cyan-500 dark:text-cyan-400 animate-pulse transition-all duration-500";
+                cryoStatusText.textContent = "Kondisi: Higienis Maksimal (Bebas Es)";
+                iceFrostOverlay.style.opacity = "0.2";
+                iceFrostOverlay.style.backdropFilter = "blur(2px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(5,7,12,0) 70%)";
+                currentSimProductId = 6;
+            }
+            else if (temp >= -15 && temp < 0) {
+                thermoStatus.textContent = "ACTIVE - STANDARD FREEZING MODE";
+                thermoStatus.className = "text-[9px] text-blue-600 dark:text-blue-400 font-bold tracking-widest uppercase mt-2 mb-1";
+                zoneTitle.textContent = "Standard Freezing Zone";
+                zoneDesc.textContent = "Membekukan daging, frozen food, dan es krim dengan stabil. Menjaga bentuk dan kandungan protein agar tetap prima untuk pemakaian harian.";
+                unitName.textContent = "Upright Freezer HKA-QD";
+                unitIcon.className = "fa-solid fa-kitchen-set text-blue-500 dark:text-blue-400";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-snowflake"></i>';
+                cryoIconContainer.className = "text-5xl text-blue-500 dark:text-blue-400 animate-spin transition-all duration-500";
+                cryoIconContainer.style.animationDuration = "12s";
+                cryoStatusText.textContent = "Kondisi: Beku Stabil (Standar)";
+                iceFrostOverlay.style.opacity = "0.5";
+                iceFrostOverlay.style.backdropFilter = "blur(4px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(5,7,12,0) 70%)";
+                currentSimProductId = 5;
+            }
+            else if (temp >= -25 && temp < -15) {
+                thermoStatus.textContent = "ACTIVE - HEAVY DEEP FREEZE RUN";
+                thermoStatus.className = "text-[9px] text-blue-700 dark:text-blue-500 font-bold tracking-widest uppercase mt-2 mb-1";
+                zoneTitle.textContent = "Cryo Deep Freeze Zone";
+                zoneDesc.textContent = "Pusat penyimpanan stok bahan baku daging/seafood jangka panjang. Membekukan secara total untuk menghentikan pembusukan bakteri.";
+                unitName.textContent = "Chest Freezer HKA-F Double";
+                unitIcon.className = "fa-solid fa-cube text-blue-600 dark:text-blue-500";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-icicles"></i>';
+                cryoIconContainer.className = "text-5xl text-sky-400 dark:text-sky-200 animate-bounce transition-all duration-500";
+                cryoStatusText.textContent = "Kondisi: Solid Frozen / Beku Keras";
+                iceFrostOverlay.style.opacity = "0.7";
+                iceFrostOverlay.style.backdropFilter = "blur(6px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(5,7,12,0) 70%)";
+                currentSimProductId = 13;
+            }
+            else {
+                thermoStatus.textContent = "OVERDRIVE - SHOCK FREEZING ENGAGED";
+                thermoStatus.className = "text-[9px] text-red-600 dark:text-red-500 font-bold tracking-widest uppercase mt-2 mb-1 animate-pulse";
+                zoneTitle.textContent = "Shock Freeze / Blast Zone";
+                zoneDesc.textContent = "Membekukan makanan panas secara instan! Mencegah kristalisasi makro sehingga tekstur, rasa, dan nutrisi makanan matang terkunci sempurna.";
+                unitName.textContent = "Blast Chiller & Shock Freezer ALISA";
+                unitIcon.className = "fa-solid fa-bolt text-red-600 dark:text-red-500";
+                cryoIconContainer.innerHTML = '<i class="fa-solid fa-burst"></i>';
+                cryoIconContainer.className = "text-5xl text-slate-100 dark:text-white animate-ping transition-all duration-300";
+                cryoStatusText.textContent = "Kondisi: Pembekuan Kilat (Shock Freeze)";
+                iceFrostOverlay.style.opacity = "0.95";
+                iceFrostOverlay.style.backdropFilter = "blur(10px)";
+                simGlowLayer.style.background = "radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(5,7,12,0) 70%)";
+                iceFrostOverlay.style.borderColor = "rgba(239, 68, 68, 0.5)";
+                currentSimProductId = 1;
+            }
+
+            if (isSimDropdownOpen) {
+                renderSimCatalogDropdown();
+            }
+        }
+
+        function toggleSimDropdown() {
+            const content = document.getElementById('sim-dropdown-content');
+            const icon = document.getElementById('sim-dropdown-icon');
+            
+            isSimDropdownOpen = !isSimDropdownOpen;
+            
+            if (isSimDropdownOpen) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+                renderSimCatalogDropdown();
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        function renderSimCatalogDropdown() {
+            const container = document.getElementById('sim-dropdown-content');
+            if (!currentSimProductId) {
+                container.innerHTML = `<div class="text-center py-4 text-sm font-semibold text-slate-500 dark:text-slate-400"><i class="fa-solid fa-circle-exclamation mb-2 text-xl text-amber-500 block"></i> Suhu tidak standar untuk kulkas komersial. Tidak ada unit.</div>`;
+                return;
+            }
+
+            const p = productsData.find(item => item.id === currentSimProductId);
+            if (!p) return;
+            
+            const variantIndex = window.simVariantMap[p.id] || 0;
+            const activeVar = p.variants[variantIndex];
+            const diskonHarga = activeVar.harga * 0.8;
+            
+            let optionsHtml = '';
+            p.variants.forEach((v, index) => {
+                optionsHtml += `<option value="${index}" ${index === variantIndex ? 'selected' : ''} class="bg-white dark:bg-[#05070c] text-slate-800 dark:text-slate-200">${v.model} (${v.kapasitas})</option>`;
+            });
+
+            container.innerHTML = `
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 bg-slate-50 dark:bg-[#05070c] border border-sky-50 dark:border-white/5 rounded-xl p-2 flex items-center justify-center overflow-hidden">
+                        <img src="${activeVar.image}" onerror="this.src='https://placehold.co/400x300/e2e8f0/06b6d4?text=${encodeURIComponent(p.brand)}'; if(document.documentElement.classList.contains('dark')) this.src='https://placehold.co/400x300/0a0f1d/06b6d4?text=${encodeURIComponent(p.brand)}'" class="max-h-full object-contain transition-transform hover:scale-110" alt="${activeVar.model}">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">${p.name}</h4>
+                        <p class="text-[10px] text-slate-500 font-semibold mb-3">${p.brand}</p>
+                        
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 dark:text-slate-500 line-through decoration-red-400">${formatRupiah(activeVar.harga)}</span>
+                            <span class="text-sm sm:text-base font-extrabold text-emerald-600 dark:text-emerald-400">${formatRupiah(diskonHarga)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">Kapasitas:</label>
+                    <div class="relative">
+                        <select onchange="updateSimVariant(${p.id}, this.value)" class="w-full bg-slate-50 dark:bg-[#05070c] border border-sky-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-300 outline-none focus:border-cyan-500 appearance-none cursor-pointer">
+                            ${optionsHtml}
+                        </select>
+                        <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none text-slate-400 text-[10px]">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 mb-4 text-[10px] text-slate-600 dark:text-slate-400">
+                    <div class="bg-slate-50 dark:bg-[#05070c] p-2 rounded border border-sky-50 dark:border-white/5">
+                        <span class="block text-slate-400 dark:text-slate-500 mb-0.5">Daya Listrik</span>
+                        <strong class="text-slate-800 dark:text-slate-300">${activeVar.daya}</strong>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-[#05070c] p-2 rounded border border-sky-50 dark:border-white/5">
+                        <span class="block text-slate-400 dark:text-slate-500 mb-0.5">Dimensi (mm)</span>
+                        <strong class="text-slate-800 dark:text-slate-300">${activeVar.p} x ${activeVar.l} x ${activeVar.t}</strong>
+                    </div>
+                </div>
+                
+                <button onclick="sendWaInquiry('${p.name} - Tipe ${activeVar.model} (${activeVar.kapasitas})', '${formatRupiah(diskonHarga)}')" class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 dark:bg-none dark:bg-[#10b981] dark:hover:bg-[#059669] text-white font-bold py-2.5 rounded-lg transition-all text-xs">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Klaim Harga Diskon
+                </button>
+            `;
+        }
+
+        function updateSimVariant(productId, variantIndex) {
+            window.simVariantMap[productId] = parseInt(variantIndex);
+            renderSimCatalogDropdown();
+        }
+
+        function triggerSimulatedAction() {
+            document.getElementById('produk').scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        // ==========================================
+        // CANVAS & ANIMATION JAVASCRIPT
+        // ==========================================
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseX = -1000;
+        let mouseY = -1000;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.r = Math.random() * 2.5 + 0.8;
+                this.d = Math.random() * 50;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.6 + 0.2;
+                this.originalOpacity = Math.random() * 0.5 + 0.2;
+                this.opacity = this.originalOpacity;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(14, 165, 233, ${this.opacity})`;
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
+                ctx.fill();
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+
+                const dx = this.x - mouseX;
+                const dy = this.y - mouseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    const forceX = dx / dist;
+                    const forceY = dy / dist;
+                    this.x += forceX * 1.5;
+                    this.y += forceY * 1.5;
+                    this.opacity = 0.9;
+                } else {
+                    if (this.opacity > this.originalOpacity) {
+                        this.opacity -= 0.01;
+                    }
+                }
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(Math.floor(canvas.width / 15), 100);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        document.getElementById('home').addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+
+        document.getElementById('home').addEventListener('mouseleave', () => {
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+
+        const spotlight = document.getElementById('magnetic-spotlight');
+        document.addEventListener('mousemove', (e) => {
+            spotlight.style.opacity = '1';
+            spotlight.style.left = `${e.clientX}px`;
+            spotlight.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mouseleave', () => {
+            spotlight.style.opacity = '0';
+        });
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + "%";
+        });
+
+        function animateCounter(id, target) {
+            const el = document.getElementById(id);
+            if(!el) return;
+            let start = 0;
+            const duration = 2000;
+            const stepTime = Math.abs(Math.floor(duration / target));
+            
+            const timer = setInterval(() => {
+                start += Math.ceil(target / 100);
+                if (start >= target) {
+                    el.textContent = target + (id === 'stat-sat' ? '%' : '+');
+                    clearInterval(timer);
+                } else {
+                    el.textContent = start;
+                }
+            }, stepTime);
+        }
+
+        let countersAnimated = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog();
+            resizeCanvas();
+            initParticles();
+            animateParticles();
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.08
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        
+                        if (entry.target.id === 'mengapa' && !countersAnimated) {
+                            countersAnimated = true;
+                            animateCounter('stat-install', 1500);
+                            animateCounter('stat-sat', 99);
+                            animateCounter('stat-garansi', 12);
+                            animateCounter('stat-teknisi', 24);
+                        }
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const elementsToReveal = document.querySelectorAll('.reveal-element, #mengapa');
+            elementsToReveal.forEach(el => revealObserver.observe(el));
+        });
+    </script>
+</body>
+</html>
